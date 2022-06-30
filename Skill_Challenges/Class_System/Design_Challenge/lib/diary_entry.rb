@@ -1,0 +1,2 @@
+class DiaryEntry 
+end
