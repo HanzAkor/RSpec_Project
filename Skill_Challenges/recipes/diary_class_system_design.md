@@ -42,17 +42,17 @@ uses asciiflow.com but you could also use excalidraw.com, draw.io, or miro.com_
 │ - best_entry_for_reading_time │
 │   => [readable entries...]    │
 └┬──────────┬───────────────────┘
- │          │                 
- │          │ owns a list of  
- │          ▼                 
- │        ┌───────────────────────┐ 
- │        │ DiaryEntry(title,     │ 
- │        │            contents)  │ 
- │        │ - title               │ 
- │        │ - contents            │ 
- │        │ - count_words         │ 
- │        │ - reading_time        │ 
- │        └───────────────────────┘ 
+ │          │
+ │          │ owns a list of
+ │          ▼
+ │        ┌───────────────────────┐
+ │        │ DiaryEntry(title,     │
+ │        │            contents)  │
+ │        │ - title               │
+ │        │ - contents            │
+ │        │ - count_words         │
+ │        │ - reading_time        │
+ │        └───────────────────────┘
  │                            │
  ▼                            │
 ┌─────────────────────────┐   │
@@ -60,7 +60,7 @@ uses asciiflow.com but you could also use excalidraw.com, draw.io, or miro.com_
 │                         │   │
 │ - add(task)             │   │
 │ - complete/done?        │   │
-│ - all                   │   │ 
+│ - all                   │   │
 │   => [tasks.....]       │   │
 └─────────────────────────┘   │
                               │
@@ -90,19 +90,40 @@ class Diary
     # Returns nothing
   end
 
-  def add_task(tasks) # tasks is an instance of TodoList
+  def count_words
+    # Returns the number of words in all diary entries
+    # HINT: This method should make use of the `count_words` method on DiaryEntry.
+
+  end
+
+  def reading_time(wpm)# wpm is an integer representing
+                        # the number of words the user can read per minute
+    # Returns an integer representing an estimate of the reading time in minutes
+    # if the user were to read all entries in the diary.
+  end
+
+  def find_best_entry_for_reading_time(wpm, minutes)
+        # `wpm` is an integer representing the number of words the user can read per minute.
+        # `minutes` is an integer representing the number of minutes the user has to read.
+    # Returns an instance of diary entry representing the entry that is closest
+    # to, but not over, the length that the user could read in the minutes they
+    # have available given their reading speed.
+
+  end
+
+  def add_tasks(todolist) # tasks is an instance of TodoList
     # tasks gets added to the diary
     # Returns nothing
   end
 
-  def all
+  def format_diary
     # Returns a list of entry objects
     # Returns list of tasks
   end
 end
 
 class DiaryEntry
-  def initialize(title, contents) # title and contents are both strings
+  def initialize(title, contents, contacts) # title, contents and contacts are all strings
     # ...
   end
 
@@ -124,18 +145,17 @@ class DiaryEntry
     # for the contents at the given wpm.
   end
 
-  def add_contacts(contact_list) # contact_list is an instance of ContactList
-    # contact_list gets added to the diary entry
+  def contacts # contact_list is an instance of ContactList
     # Returns list of contacts
   end
 
   def format_entry
-    # Returns a string of the form     # ["my title.
+    # Returns an array of the form     # ["my title.
                                        #  my contents.
-                                       #  Contacts:
+                                       #  Contacts==
                                        #  Full Name: 07123456789"]
-    
-    
+
+
   end
 end
 
@@ -155,11 +175,6 @@ class TodoList
     # Returns a list of the tasks added as strings
   end
 
-  def complete(task) # task is a string representing a task to mark as complete
-    # Marks qualifying tasks as done
-    # Fails if the task doesn't complete
-  end
-
 end
 
 
@@ -168,13 +183,17 @@ class ContactList
   def initialize
     # ...
   end
-
-  def add(contact_details)# contact_details is an instance of Contact
-    # Returns name
+# contact_details is an instance of Contact
+    # adds contact_details to empty list
+  def add(contact_details)
   end
 
   def all
     # Returns list of all contacts
+  end
+
+  def format
+    # Returns an array of the form ["Contacts==  Full Name1: 07111222333, Full Name2: 07444555666"]
   end
 end
 
@@ -185,11 +204,11 @@ class Contact
   end
 
   def name
-    # Returns name
+    # Gets name
   end
 
   def number
-    # Returns number
+    # Gets number
   end
 
   def format
@@ -210,31 +229,43 @@ todo_list = TodoList.new
 contact = Contact.new
 contact_list = ContactList.new
 
+DIARY
 # 1 Gets all information
 diary = Diary.new
-diary_entry1 = DiaryEntry.new("my title", "my contents")
-diary_entry2 = DiaryEntry.new("my title 2", "my contents 2")
-diary_entry3 = DiaryEntry.new("my title 3", "my contents 3")
+diary_entry1 = DiaryEntry.new(title, contents, contacts)
+diary_entry2 = DiaryEntry.new(title, contents, contacts)
+diary_entry3 = DiaryEntry.new(title, contents, contacts)
 diary.add_entry(diary_entry1)
 diary.add_entry(diary_entry2)
 diary.add_entry(diary_entry3)
-todo_list = TodoList.new
-diary.add_tasks(todo_list)
-diary.all # =>  [[diary_entry1], [diary_entry2], [diary_entry3], [todo_list]]
 diary.count_words # =>   8
 diary.reading_time(2) # =>   4
 diary.find_best_entry_for_reading_time(2, 1) # =>  diary_entry1
+todo_list = TodoList.new
+diary.add_tasks(todo_list)
+diary.format_diary # =>  [[diary_entry1], [diary_entry2], [diary_entry3], [todo_list]]
 
-# Gets entry contents and contact details
-diary_entry = DiaryEntry.new("my title", "my contents")
-contacts = Contacts.new
+
+DIARY ENTRY
+# Gets entry contents and contact details (instance of contact list) and formats the entry
+diary_entry = DiaryEntry.new(title, contents, contacts)
 diary_entry.title # =>  "my title"
 diary_entry.contents # =>  "my contents"
 diary_entry.count_words # =>  2
 diary_entry.reading_time(2) # =>  1
-diary_entry.add_contacts # =>  ["Full Name1: 07123456789", "Full Name2: 07123456789", "Full Name3: 07123456789"]
+contact_list = ContactList.new
+diary_entry.contacts
+diary_entry.contacts
+diary_entry.format_entry # => ["my title, my contents, Contacts==  Full Name1: 07111222333, Full Name2: 07444555666"]
 
 
+CONTACT LIST
+# Gets all contacts
+contact_list = Contact_List.new
+contact_list.add(contact_details1)
+contact_list.add(contact_details2)
+contact_list.all # => [contact_details1, contact_details2]
+contact_list.format # => ["Contacts==  Full Name1: 07111222333, Full Name2: 07444555666"]
 ```
 
 ## 4. Create Examples as Unit Tests
@@ -243,21 +274,59 @@ _Create examples, where appropriate, of the behaviour of each relevant class at
 a more granular level of detail._
 
 ```ruby
+DIARY
+# starts off with an empty list of entries
+diary = Diary.new
+diary.all # =>  []
+
+# with no word count
+diary = Diary.new
+diary.count_words # =>  0
+
+# and no reading time
+diary = Diary.new
+diary.reading_time(2) # =>  0
+
+# and a readable entry of nil
+diary = Diary.new
+diary.find_best_entry_for_reading_time(2, 1) # =>  nil
+
+DIARY ENTRY
 # Contructs a diary entry
-diary_entry = DiaryEntry.new("my title", "my contents")
+diary_entry = DiaryEntry.new(title, contents, contacts)
 diary_entry.format_entry # =>   [ "my title;    my contents;    Contacts: Full Name: 07123456789" ]
- 
+  # With a word count method
+diary_entry.count_words # => eq 2
+diary_entry = DiaryEntry.new(title, contents, contacts)
+diary_entry.count_words # =>  0
+  # And a reading time method
+diary_entry = DiaryEntry.new(title, contents, contacts)
+diary_entry.reading_time(200) # =>  1
+
+TODO LIST
 # Construct a to do list
 todo_list = TodoList.new
-todo_list.add("Clean the house")
-todo_list.add("Wash the car")
+todo_list.add(task)
+todo_list.add(task)
 todo_list.all_tasks # =>  ["Clean the house", "Wash the car"]
 todo_list.complete # =>  ["Clean the house :_done", "Wash the car :_done"]
 
-
+CONTACT
 # Contstructs a contact
-contact = Contact.new("Full Name", "07123456789")
+contact = Contact.new(name, number)
+contact.name # => "Full Name"
+contact.number # => "07123456789"
 contact.format # =>  "Full Name: 07123456789"
+
+CONTACT LIST
+# Starts off with an empty list of contacts
+contact_list = ContactList.new
+contact_list.all # => []
+
+# adds formatted contacts (instance of contact)to the list
+contact_list = ContactList.new
+contact_details = contact_list.add(contact)
+contact_details # =>  ["Full Name1: 07111222333"]
 
 ```
 
