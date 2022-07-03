@@ -1,0 +1,11 @@
+First Text
+
+
+"it" block = reads as an assertion of what the described method should be doing
+call the method and assign the result to a variable called "result" or any other name
+use "expect" rspec functionality to expect or assert the result variable to equal the expected result.
+
+mutation testing => create a mutation of the working code (break the method) that the test should fail on and check if the test fails
+ 
+
+ 
